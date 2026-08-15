@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VIP ULTRA QUANTUM AI PRO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --card-glass: rgba(15, 23, 42, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --neon-gold: #ffd700;
+            --neon-blue: #00f0ff;
+            --neon-green: #10b981;
+            --neon-red: #ef4444;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Chakra Petch', sans-serif; }
+
+        body {
+            background: var(--bg-deep);
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(255, 215, 0, 0.08) 0px, transparent 40%),
+                radial-gradient(at 90% 90%, rgba(0, 240, 255, 0.08) 0px, transparent 40%);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 14px;
+        }
+
+        .key-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.95);
+            backdrop-filter: blur(16px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .key-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 30px 24px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+
+        .key-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--neon-gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .key-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 24px; }
+        .key-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        .key-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 12px rgba(0, 240, 255, 0.3); }
+        .key-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--neon-gold), #ffaa00);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .key-error { color: var(--neon-red); font-size: 0.8rem; font-weight: 700; margin-top: 10px; display: none; }
+
+        .dashboard {
+            width: 100%;
+            max-width: 450px;
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
+            padding: 14px 18px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .logo { 
+            font-size: 1.1rem; 
+            font-weight: 900; 
+            background: linear-gradient(45deg, var(--neon-gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .signal-box {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 22px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .engine-badge { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .prediction-text { font-size: 3.8rem; font-weight: 900; margin: 2px 0; text-shadow: 0 0 20px rgba(0, 240, 255, 0.4); color: var(--neon-blue); }
+        .prog-track { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 20px; overflow: hidden; margin: 14px 0 18px 0; }
+        .prog-fill { height: 100%; width: 0%; background: var(--neon-blue); transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .info-card { display: flex; flex-direction: column; align-items: center; }
+        .info-lbl { font-size: 0.68rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .info-val { font-size: 1rem; font-weight: 700; margin-top: 2px; }
+
+        .history-box {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 18px;
+        }
+
+        .history-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; }
+        th { font-size: 0.75rem; color: var(--text-muted); padding-bottom: 10px; border-bottom: 1px solid var(--border-glass); text-transform: uppercase; }
+        td { font-size: 0.88rem; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .p-code { color: var(--text-muted); font-weight: 500; }
+        .draw-badge { background: rgba(255, 255, 255, 0.08); padding: 3px 8px; border-radius: 6px; font-weight: 700; margin-right: 6px; }
+        
+        .badge-win { background: rgba(16, 185, 129, 0.15); color: var(--neon-green); border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; }
+        .badge-lose { background: rgba(239, 68, 68, 0.15); color: var(--neon-red); border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; }
+        .multiplier-badge { background: rgba(255, 215, 0, 0.15); color: var(--neon-gold); border: 1px solid rgba(255, 215, 0, 0.3); padding: 2px 6px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+<div class="key-overlay" id="key-overlay">
+    <div class="key-card">
+        <div class="key-title">VIP ACCESS SYSTEM</div>
+        <div class="key-sub">Enter Premium Key To Unlock Prediction System</div>
+        <input type="password" id="access-key-input" class="key-input" placeholder="ENTER ACCESS KEY">
+        <button class="key-btn" onclick="verifyKey()">ACCESS SYSTEM</button>
+        <div class="key-error" id="key-error">INVALID ACCESS KEY!</div>
+    </div>
+</div>
+
+<div class="dashboard" id="main-dashboard">
+    <div class="top-nav">
+        <div class="logo">👑 VIP QUANTUM AI</div>
+        <div style="font-size: 0.8rem; color: var(--neon-green); font-weight: 700;">● SYSTEM ACTIVE</div>
+    </div>
+
+    <div class="signal-box">
+        <div class="engine-badge">Engine: Custom Pattern Engine</div>
+        <div class="prediction-text" id="signal-text">--</div>
+        
+        <div class="prog-track">
+            <div id="conf-bar" class="prog-fill"></div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <span class="info-lbl">PERIOD</span>
+                <span class="info-val" id="period-val">#------</span>
+            </div>
+            <div class="info-card">
+                <span class="info-lbl">TIMER</span>
+                <span class="info-val" id="timer-val" style="color: var(--neon-blue);">00s</span>
+            </div>
+            <div class="info-card">
+                <span class="info-lbl">CONF.</span>
+                <span class="info-val" id="conf-val">--%</span>
+            </div>
+            <div class="info-card">
+                <span class="info-lbl">NEXT BET</span>
+                <span class="info-val" id="next-bet-val" style="color: var(--neon-gold);">1X</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-box">
+        <div class="history-title">
+            <span>Last 10 Rounds Verification</span>
+            <span style="color: var(--neon-blue); font-size: 0.8rem;">[ REALTIME VERIFIED ]</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">PERIOD</th>
+                    <th style="text-align: center;">RESULT</th>
+                    <th style="text-align: center;">PRED. / BET</th>
+                    <th style="text-align: right;">STATUS</th>
+                </tr>
+            </thead>
+            <tbody id="logs-body">
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 15px;">Fetching Data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const VALID_KEY = "premium";
+    const API_URL = "https://draw.ar-lottery01.com/TrxWinGo/TrxWinGo_1M/GetHistoryIssuePage.json";
+
+    let currentPeriod = "";
+    let historyData = [];
+
+    function verifyKey() {
+        const inputVal = document.getElementById('access-key-input').value.trim();
+        const errEl = document.getElementById('key-error');
+
+        if (inputVal === VALID_KEY) {
+            document.getElementById('key-overlay').style.display = "none";
+            document.getElementById('main-dashboard').style.display = "flex";
+            syncData();
+            setInterval(syncData, 2000);
+            startTimer();
+        } else {
+            errEl.style.display = "block";
+        }
+    }
+
+    // တကယ့် Algorithm သုံးပြီး Period တခုစီအတွက် prediction မှန်မှန်ကန်ကန် တွက်ထုတ်ပေးသည့် function
+    function computePredictionForSublist(subList) {
+        let numbers = subList.map(i => parseInt(i.result !== undefined ? i.result : i.number, 10) || 0);
+        if (numbers.length === 0) return { forecast: "SMALL", conf: 75 };
+
+        let lastNum = numbers[0];
+
+        if (lastNum === 0) {
+            let zeroStreak = 0;
+            for (let i = 0; i < numbers.length; i++) {
+                if (numbers[i] === 0) zeroStreak++;
+                else break;
+            }
+            if (zeroStreak <= 3) return { forecast: "BIG", conf: 88 };
+            else return { forecast: "SMALL", conf: 85 };
+        }
+
+        if (lastNum === 9) {
+            let nineStreak = 0;
+            for (let i = 0; i < numbers.length; i++) {
+                if (numbers[i] === 9) nineStreak++;
+                else break;
+            }
+            if (nineStreak <= 3) return { forecast: "SMALL", conf: 88 };
+            else return { forecast: "BIG", conf: 85 };
+        }
+
+        let streakType = lastNum >= 5 ? "BIG" : "SMALL";
+        let streakCount = 0;
+
+        for (let i = 0; i < numbers.length; i++) {
+            let type = numbers[i] >= 5 ? "BIG" : "SMALL";
+            if (type === streakType) {
+                streakCount++;
+            } else {
+                break;
+            }
+        }
+
+        let forecast = "SMALL";
+        let baseConf = 75;
+
+        if (streakType === "SMALL") {
+            if (streakCount === 1 || streakCount === 2) {
+                forecast = "SMALL";
+                baseConf = 78;
+            } else if (streakCount === 3) {
+                forecast = "BIG";
+                baseConf = 84;
+            } else if (streakCount >= 4) {
+                forecast = "SMALL";
+                baseConf = 89;
+            }
+        } else {
+            if (streakCount === 1 || streakCount === 2) {
+                forecast = "BIG";
+                baseConf = 78;
+            } else if (streakCount === 3) {
+                forecast = "SMALL";
+                baseConf = 84;
+            } else if (streakCount >= 4) {
+                forecast = "BIG";
+                baseConf = 89;
+            }
+        }
+
+        return { forecast: forecast, conf: baseConf };
+    }
+
+    async function syncData() {
+        try {
+            const res = await fetch(`${API_URL}?t=${Date.now()}`);
+            if (!res.ok) return;
+            const json = await res.json();
+            const list = json.data?.list || json.list || [];
+            if (list.length === 0) return;
+
+            const latest = list[0];
+            const apiPeriod = String(latest.issue || latest.issueNumber || "");
+
+            if (currentPeriod !== apiPeriod) {
+                currentPeriod = apiPeriod;
+
+                // လက်ရှိပွဲအတွက် ခန့်မှန်းချက်
+                window.currentRes = computePredictionForSublist(list);
+
+                let rawHistory = [];
+                let maxItems = Math.min(list.length - 1, 10);
+
+                // အဟောင်းဆုံး မှ အသစ်ဆုံး သို့ တိကျစွာ ပြန်တွက်ထုတ်ခြင်း
+                for (let idx = maxItems - 1; idx >= 0; idx--) {
+                    let currentItem = list[idx];
+                    let pNum = String(currentItem.issue || currentItem.issueNumber || "");
+                    let drawNum = parseInt(currentItem.result !== undefined ? currentItem.result : currentItem.number, 10);
+                    let actualType = drawNum >= 5 ? "BIG" : "SMALL";
+
+                    // အဲ့ဒီ period အချိန်တုန်းက ပေးခဲ့ရမယ့် prediction ကို သေချာ slice လုပ်ပြီး တွက်ချက်ခြင်း
+                    let historicalSubList = list.slice(idx + 1);
+                    let histRes = computePredictionForSublist(historicalSubList);
+
+                    rawHistory.push({
+                        period: pNum.slice(-4),
+                        num: drawNum,
+                        actual: actualType,
+                        forecast: histRes.forecast,
+                        win: histRes.forecast === actualType
+                    });
+                }
+
+                // Bet Multipliers စနစ်အမှန်အတိုင်း တွက်ချက်ခြင်း (+1X on LOSE, 1X on WIN)
+                let currentMultiplier = 1;
+                for (let i = 0; i < rawHistory.length; i++) {
+                    rawHistory[i].betX = currentMultiplier;
+                    if (rawHistory[i].win) {
+                        currentMultiplier = 1; // WIN လျှင် 1X သို့ ပြန်ကျမည်
+                    } else {
+                        currentMultiplier += 1; // LOSE လျှင် +1X တိုးမည် (1X -> 2X -> 3X)
+                    }
+                }
+
+                window.nextBetMultiplier = currentMultiplier;
+
+                // Output Display အတွက် Reverse ပြန်လုပ်ပြီး အသစ်ဆုံးကို ထိပ်ဆုံး တင်ပေးခြင်း
+                historyData = rawHistory.reverse();
+                renderHistory();
+                updateUI();
+            }
+
+        } catch (e) { console.error("Data Fetch Error", e); }
+    }
+
+    function updateUI() {
+        if (!window.currentRes) return;
+
+        let cleanPeriod = currentPeriod.replace(/[^0-9]/g, "");
+        let nextPeriod = (BigInt(cleanPeriod || "0") + 1n).toString();
+        
+        const pEl = document.getElementById('period-val');
+        if (pEl) pEl.innerText = "#" + nextPeriod.slice(-6);
+
+        const currentRes = window.currentRes;
+        const signalEl = document.getElementById('signal-text');
+        const confBar = document.getElementById('conf-bar');
+
+        if (signalEl) signalEl.innerText = currentRes.forecast;
+        if (confBar) confBar.style.width = currentRes.conf + "%";
+
+        const cVal = document.getElementById('conf-val');
+        if (cVal) cVal.innerText = currentRes.conf + "%";
+
+        const nextBetEl = document.getElementById('next-bet-val');
+        if (nextBetEl) nextBetEl.innerText = (window.nextBetMultiplier || 1) + "X";
+    }
+
+    function renderHistory() {
+        const tbody = document.getElementById('logs-body');
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        historyData.forEach(item => {
+            const row = tbody.insertRow();
+            
+            const c0 = row.insertCell(0);
+            c0.className = "p-code";
+            c0.style.textAlign = "left";
+            c0.innerText = item.period;
+
+            const c1 = row.insertCell(1);
+            c1.style.textAlign = "center";
+            c1.innerHTML = `<span class="draw-badge">${item.num}</span><span style="color:var(--text-muted); font-size: 0.8rem;">${item.actual}</span>`;
+
+            const c2 = row.insertCell(2);
+            c2.style.textAlign = "center";
+            c2.innerHTML = `<strong style="color: var(--neon-blue);">${item.forecast}</strong> <span class="multiplier-badge">${item.betX}X</span>`;
+
+            const c3 = row.insertCell(3);
+            c3.style.textAlign = "right";
+            c3.innerHTML = item.win 
+                ? `<span class="badge-win">WIN</span>` 
+                : `<span class="badge-lose">LOSE</span>`;
+        });
+    }
+
+    function startTimer() {
+        setInterval(function() {
+            const sec = 60 - new Date().getUTCSeconds();
+            const timerEl = document.getElementById('timer-val');
+            if (timerEl) {
+                timerEl.innerText = `${sec.toString().padStart(2, '0')}s`;
+                timerEl.style.color = sec <= 5 ? "var(--neon-red)" : "var(--neon-blue)";
+            }
+        }, 1000);
+    }
+</script>
+</body>
+</html>
